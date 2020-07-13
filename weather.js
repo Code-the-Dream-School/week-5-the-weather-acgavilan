@@ -231,7 +231,7 @@ function displayWeather(name, country, temp, des) {
 function show() {
   const key = "867603c87a267dde98d8a1a6c4c7ca23";
   const cityname = document.getElementById("city").value;
-  const api = `http://api.openweathermap.org/data/2.5/weather?q=${cityname}&units=imperial&appid=${key}`;
+  const api = `https://api.openweathermap.org/data/2.5/weather?q=${cityname}&units=imperial&appid=${key}`;
 
 ///first call to the api
 
@@ -244,7 +244,7 @@ function show() {
         displayWeather(data.name, data.sys.country, data.main.temp, data.weather[0].main);
 
 
-      ///second call to the api   
+      ///second call to the api``~  
         const api2 = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&appid=${key}`;
 
             fetch(api2)
