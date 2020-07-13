@@ -241,7 +241,7 @@ function show() {
         let lon = data.coord.lon;
         let lat = data.coord.lat;
         //displayweather makes the first api call and displays the name, country and weather.
-        displayWeather(data.name, data.sys.country, data.main.temp, data.weather[0].main);
+        displayWeather(data.name, data.sys.country, Math.round(data.main.temp), data.weather[0].main);
 
 
       ///second call to the api``~  
