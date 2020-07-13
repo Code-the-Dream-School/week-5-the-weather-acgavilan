@@ -1,4 +1,6 @@
 
+
+//testing code trial and error.//
 /*
 api.openweathermap.org/data/2.5/weather?q={city name},{state code}&appid={dc729ba0093e651945384e8d23f8314b}
 
@@ -103,16 +105,7 @@ fetch('https://api.openweathermap.org/data/2.5/onecall?lat=33.441792&lon=-94.037
       }
 
   }
-      
-*/
 
-const display = document.getElementById("search").addEventListener('click', show);
-
-const tablebody = document.getElementById("info"); 
-
-function displayWeather(name, country, temp, des, lat, lon) {
-  
-  
   const key = "867603c87a267dde98d8a1a6c4c7ca23";
   const api2 = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&appid=${key}`;
 
@@ -122,7 +115,16 @@ function displayWeather(name, country, temp, des, lat, lon) {
   .catch(error => error = `<h2>City not found </h2>`)
    
 
+  displayWeather(data.name, data.sys.country, data.main.temp, data.weather[0].main, data.coord.lat, data.coord.lon )
+      
 
+//first api call works second needs work
+
+const display = document.getElementById("search").addEventListener('click', show);
+
+const tablebody = document.getElementById("info"); 
+
+function displayWeather(name, country, temp, des) {
   const table = `<table >
                         <tr>
                           <th>Name</th>
@@ -132,7 +134,7 @@ function displayWeather(name, country, temp, des, lat, lon) {
                         </tr>
                         <tr>
                           <td>${name}</td>
-                          <td>${country}</td>
+                          <td>${country}</td>{
                           <td>${temp}</td>
                           <td>${des}</td>
                         </tr>
@@ -141,26 +143,148 @@ function displayWeather(name, country, temp, des, lat, lon) {
 
 }
 
+
+
+
 function show() {
   const key = "867603c87a267dde98d8a1a6c4c7ca23";
   const cityname = document.getElementById("city").value;
   const api = `http://api.openweathermap.org/data/2.5/weather?q=${cityname}&units=imperial&appid=${key}`;
   
-
-
+  
   fetch(api)
       .then(response => response.json())
-      .then(data => displayWeather(data.name, data.sys.country, data.main.temp, data.weather[0].main, data.coord.lat, data.coord.lon ))
+      .then(data => {
+            let lon = data.coord.lon;
+            let lat = data.coord.lat;
+            displayWeather(data.name, data.sys.country, data.main.temp, data.weather[0].main);
+
+            const api2 = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&appid=${key}`;
+
+            fetch(api2)
+            .then(response => response.json())
+            .then(data => {
+              let daily = data.daily;
+              let sevenDayWeather = daily.map((item, index, array)=>{
+                let max = Math.round(item.temp.max);
+                let min = Math.round(item.temp.min);
+                let day = index;
+                let icon = item.weather[0].icon;
+
+                let table2 = document.getElementById("info").innerHTML += `<table >
+                                        <tr>
+                                          <th>day</th>
+                                          <th>min</th>
+                                          <th>max</th>
+                                          <th>Icon</th>
+                                          
+                                        </tr>
+                                        <tr>
+                                          <td>${day}</td>
+                                          <td>${min}</td>{
+                                          <td>${max}</td>
+                                          <td>${icon}</td>
+                                        
+                                        </tr>
+                                </table>`; 
+                return table2;
+              
+                
+              })
+               
+            })
+            
+            
+      })
       .catch(error => alert("please type city!"))
+      .else(error=> alert("citty not found")).
 
 
 }
+*/
 
+const display = document.getElementById("search").addEventListener('click', show);
 
+const tablebody = document.getElementById("info");
 
+//call first table and displays temp weather and description....
 
+function displayWeather(name, country, temp, des) {
+  const table = `<table >
+                        <tr>
+                          <th>Name</th>
+                          <th>Country</th>
+                          <th>Temp</th>
+                          <th>Description</th>
+                        </tr>
+                        <tr>
+                          <td>${name}</td>
+                          <td>${country}</td>{
+                          <td>${temp}</td>
+                          <td>${des}</td>
+                        </tr>
+                  </table>`;
+  tablebody.innerHTML = table;
+
+}
     
+function show() {
+  const key = "867603c87a267dde98d8a1a6c4c7ca23";
+  const cityname = document.getElementById("city").value;
+  const api = `http://api.openweathermap.org/data/2.5/weather?q=${cityname}&units=imperial&appid=${key}`;
 
+///first call to the api
+
+  fetch(api)
+  .then(response => response.json())
+  .then(data => {
+        let lon = data.coord.lon;
+        let lat = data.coord.lat;
+        //displayweather makes the first api call and displays the name, country and weather.
+        displayWeather(data.name, data.sys.country, data.main.temp, data.weather[0].main);
+
+
+      ///second call to the api   
+        const api2 = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&appid=${key}`;
+
+            fetch(api2)
+            .then(response => response.json())
+            .then(data => {
+              let daily = data.daily;
+              let sevenDayWeather = daily.map((item, index, array)=>{
+                let max = Math.round(item.temp.max);
+                let min = Math.round(item.temp.min);
+                let day = index;
+                let icon = item.weather[0].icon;
+
+                let table2 = document.getElementById("info").innerHTML += `<table >
+                                        <tr>
+                                          <th>day</th>
+                                          <th>min</th>
+                                          <th>max</th>
+                                          <th>Icon</th>
+                                          
+                                        </tr>
+                                        <tr>
+                                          <td>${day}</td>
+                                          <td>${min}</td>{
+                                          <td>${max}</td>
+                                          <td>${icon}</td>
+                                        
+                                        </tr>
+                                </table>`; 
+                return table2;
+              
+                
+              })
+               
+            })
+            
+            
+      })
+      .catch(error => alert("please type city!"))
+     
+}
 
 
 
