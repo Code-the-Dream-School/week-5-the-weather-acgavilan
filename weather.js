@@ -219,7 +219,7 @@ function displayWeather(name, country, temp, des) {
                         </tr>
                         <tr>
                           <td>${name}</td>
-                          <td>${country}</td>{
+                          <td>${country}</td>
                           <td>${temp}</td>
                           <td>${des}</td>
                         </tr>
@@ -267,7 +267,7 @@ function show() {
                                         </tr>
                                         <tr>
                                           <td>${day}</td>
-                                          <td>${min}</td>{
+                                          <td>${min}</td>
                                           <td>${max}</td>
                                           <td>${icon}</td>
                                         
